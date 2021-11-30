@@ -13,8 +13,8 @@ Run workloads like:
 * Fedora (35) as operating system
 * k3s as Kubernetes distribution
 * Longhorn for persistent storage
-* Treafik using LetsEncrypt
 * 1Password Secrets Automation for storing secrets
+* Traefik using LetsEncrypt
 
 == k3s
 https://rancher.com/docs/k3s/latest/en/[Documentation^]
@@ -31,10 +31,6 @@ https://rancher.com/docs/k3s/latest/en/storage/[Install via kubectl^]:
 ----
 kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
 ----
-
-== Treafik
-https://doc.traefik.io/traefik/[Documentation^]
-https://doc.traefik.io/traefik/https/acme/[Documentation on ACME^]
 
 == 1Password Secrets Automation
 https://support.1password.com/connect-deploy-kubernetes[Setup^]
@@ -55,3 +51,8 @@ kns 1password
 helm install connect 1password/connect --set-file connect.credentials=./1password-credentials.json --set operator.create=true --set operator.token.value=<token>
 ----
 
+https://1password.community/discussion/125401/unable-to-get-item-from-vault[First problem encounterd^]
+
+== Traefik
+https://doc.traefik.io/traefik/[Documentation^]
+https://doc.traefik.io/traefik/https/acme/[Documentation on ACME^]

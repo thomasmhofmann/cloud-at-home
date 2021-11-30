@@ -1,0 +1,49 @@
+= Goal
+Run a Kubernetes Cluster on a (small) machine at home.
+
+Run workloads like:
+
+* Unify Control Center
+* Homeassitent
+* GitLab
+* CodeServer
+
+= Setup
+
+* Fedora (35) as operating system
+* k3s as Kubernetes distribution
+* Longhorn for persistent storage
+* Treafik using LetsEncrypt
+* 1Password Secrets Automation for storing secrets
+
+== k3s
+https://rancher.com/docs/k3s/latest/en/[Documentation^]
+
+----
+curl -sfL https://get.k3s.io | sh -
+----
+
+== Longhorn
+https://longhorn.io/docs/1.2.2/advanced-resources/os-distro-specific/csi-on-k3s/[Documentation^]
+
+https://rancher.com/docs/k3s/latest/en/storage/[Install via kubectl^]:
+
+----
+kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
+----
+
+== Treafik
+https://doc.traefik.io/traefik/[Documentation^]
+https://doc.traefik.io/traefik/https/acme/[Documentation on ACME^]
+
+== 1Password Secrets Automation
+https://support.1password.com/connect-deploy-kubernetes[Setup^]
+https://github.com/1Password/connect-helm-charts[Documentation and Helm Repository^]
+https://github.com/1Password/connect-helm-charts/tree/main/charts/connect[Details on the Connect Server and Operator^]
+
+https://helm.sh/docs/intro/install/#from-script[Install Helm^]
+
+----
+$ helm repo add 1password https://1password.github.io/connect-helm-charts
+----
+

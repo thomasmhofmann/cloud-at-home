@@ -38,12 +38,20 @@ https://doc.traefik.io/traefik/https/acme/[Documentation on ACME^]
 
 == 1Password Secrets Automation
 https://support.1password.com/connect-deploy-kubernetes[Setup^]
-https://github.com/1Password/connect-helm-charts[Documentation and Helm Repository^]
+https://github.com/1Password/connect-helm-charts[Helm Repository^]
 https://github.com/1Password/connect-helm-charts/tree/main/charts/connect[Details on the Connect Server and Operator^]
+https://github.com/1Password/onepassword-operator[Operator]
+https://github.com/1Password/onepassword-operator#usage[CRD Description]
 
 https://helm.sh/docs/intro/install/#from-script[Install Helm^]
 
 ----
 $ helm repo add 1password https://1password.github.io/connect-helm-charts
+----
+
+----
+kubectl create namespace 1password
+kns 1password
+helm install connect 1password/connect --set-file connect.credentials=./1password-credentials.json --set operator.create=true --set operator.token.value=<token>
 ----
 

@@ -53,6 +53,14 @@ helm install connect 1password/connect --set-file connect.credentials=./1passwor
 
 https://1password.community/discussion/125401/unable-to-get-item-from-vault[First problem encounterd^]
 
+DNS issues:
+----
+[thofmann@w530 ~]$ k exec onepassword-connect-54c545fd75-qzs9v -c connect-sync -- bash -c 'openssl s_client -crlf -connect my.ent.1password.com:443 -servername my.ent.1password.com'
+140261671187584:error:2008F002:BIO routines:BIO_lookup_ex:system lib:../crypto/bio/b_addr.c:724:Temporary failure in name resolution
+connect:errno=11
+command terminated with exit code 1
+----
+
 == Traefik
 https://doc.traefik.io/traefik/[Documentation^]
 https://doc.traefik.io/traefik/https/acme/[Documentation on ACME^]

@@ -52,6 +52,25 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)"
 echo 'eval "$(starship init bash)"' >>~/.bashrc
 ----
 
+Configure:
+----
+mkdir -p ~/.config && touch ~/.config/starship.toml
+----
+
+`starship.toml`:
+----
+format = "$all"
+add_newline = true
+
+[directory]
+truncation_length = 3
+truncation_symbol = "…/"
+
+[kubernetes]
+format = 'on [⛵ $context \($namespace\)](dimmed green) '
+disabled = false
+----
+
 == 1Password Secrets Automation
 https://support.1password.com/connect-deploy-kubernetes[Setup^]
 https://github.com/1Password/connect-helm-charts[Helm Repository^]

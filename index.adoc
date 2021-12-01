@@ -107,6 +107,16 @@ Solution / Workaround for Fedora /RHEL turn of firewalld
 systemctl disable firewalld --now
 ----
 
+After re-generating secrets using op CLI and updating the secrets access to vault is still forbidden.
+Generating credentials at https://my.ent.1password.com/integrations/connect and using them both together finally worked:
+
+----
+kubectl create secret generic op-credentials --from-file=1password-credentials.json=op-session
+kubectl create secret generic onepassword-token --from-literal=token=<token>
+----
+
+A secret is created but it is empty.
+
 == Traefik
 https://doc.traefik.io/traefik/[Documentation^]
 https://doc.traefik.io/traefik/https/acme/[Documentation on ACME^]

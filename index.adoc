@@ -13,6 +13,8 @@ Run workloads like:
 * Fedora (35) as operating system
 * k3s as Kubernetes distribution
 * Longhorn for persistent storage
+* Kubectl Bash Completion
+* Starship
 * 1Password Secrets Automation for storing secrets
 * Traefik using LetsEncrypt
 
@@ -32,6 +34,24 @@ https://rancher.com/docs/k3s/latest/en/storage/[Install via kubectl^]:
 kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
 ----
 
+== Kubectl Bash Completion
+https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-bash-linux/
+
+----
+echo 'source <(kubectl completion bash)' >>~/.bashrc
+echo 'alias k=kubectl' >>~/.bashrc
+echo 'complete -F __start_kubectl k' >>~/.bashrc
+----
+
+== Starship
+https://starship.rs/[Web Site]
+
+Install:
+----
+sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+echo 'eval "$(starship init bash)"' >>~/.bashrc
+----
+
 == 1Password Secrets Automation
 https://support.1password.com/connect-deploy-kubernetes[Setup^]
 https://github.com/1Password/connect-helm-charts[Helm Repository^]
@@ -49,6 +69,27 @@ $ helm repo add 1password https://1password.github.io/connect-helm-charts
 kubectl create namespace 1password
 kns 1password
 helm install connect 1password/connect --set-file connect.credentials=./1password-credentials.json --set operator.create=true --set operator.token.value=<token>
+----
+
+Create `OnePasswordItem` resources:
+----
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: inst-ver2-eip-all-2-0-0-secrets
+  namespace: 1password-test
+spec:
+  itemPath: "vaults/k8s/items/inst-ver2-eip-all-2-0-0-secrets"
+----
+
+----
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: test-password
+  namespace: 1password-test
+spec:
+  itemPath: "vaults/k8s/items/test-password"
 ----
 
 https://1password.community/discussion/125401/unable-to-get-item-from-vault[First problem encounterd^]
@@ -129,6 +170,15 @@ Type:  Opaque
 Data
 ====
 password:  24 bytes
+----
+
+A Secret Note item results in a secret with several entries:
+----
+k get secrets
+NAME                              TYPE                                  DATA   AGE
+default-token-6g6v7               kubernetes.io/service-account-token   3      3m22s
+inst-ver2-eip-all-2-0-0-secrets   Opaque                                42     3m21s
+test-password                     Opaque                                1      3m16s
 ----
 
 == Traefik

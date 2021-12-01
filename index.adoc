@@ -101,6 +101,12 @@ coredns-7448499f4d-jnkjr   1/1     Running   0          43h
 [ERROR] plugin/errors: 2 www.heise.de. A: read udp 10.42.0.4:45065->192.168.0.1:53: i/o timeout
 ----
 
+Solution / Workaround for Fedora /RHEL turn of firewalld
+
+----
+systemctl disable firewalld --now
+----
+
 == Traefik
 https://doc.traefik.io/traefik/[Documentation^]
 https://doc.traefik.io/traefik/https/acme/[Documentation on ACME^]

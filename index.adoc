@@ -115,7 +115,21 @@ kubectl create secret generic op-credentials --from-file=1password-credentials.j
 kubectl create secret generic onepassword-token --from-literal=token=<token>
 ----
 
-A secret is created but it is empty.
+After actually adding a password to the item a secret with one entry is created:
+----
+k describe secret test-password
+Name:         test-password
+Namespace:    1password
+Labels:       <none>
+Annotations:  operator.1password.io/item-path: vaults/natvq4234uig7adkdn3ljcm74y/items/ijmwk25nocgm5ko346ydsf5uje
+              operator.1password.io/item-version: 2
+
+Type:  Opaque
+
+Data
+====
+password:  24 bytes
+----
 
 == Traefik
 https://doc.traefik.io/traefik/[Documentation^]

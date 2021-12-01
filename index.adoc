@@ -17,6 +17,7 @@ Run workloads like:
 * Starship
 * 1Password Secrets Automation for storing secrets
 * Traefik using LetsEncrypt
+* Keycloak
 
 == k3s
 https://rancher.com/docs/k3s/latest/en/[Documentation^]
@@ -203,3 +204,5 @@ test-password                     Opaque                                1      3
 == Traefik
 https://doc.traefik.io/traefik/[Documentation^]
 https://doc.traefik.io/traefik/https/acme/[Documentation on ACME^]
+
+== Keycloak

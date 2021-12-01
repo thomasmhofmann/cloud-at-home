@@ -207,6 +207,23 @@ https://doc.traefik.io/traefik/[Documentation^]
 https://doc.traefik.io/traefik/https/acme/[Documentation on ACME^]
 
 == cert-manager
-https://cert-manager.io/docs/[Docs^] will be used with LetsEncrypt.
+https://cert-manager.io/docs/[Docs^] are here. Will be used with LetsEncrypt.
+
+Installation:
+
+----
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+----
+
+----
+helm install \
+  cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --version v1.6.1 \
+  --set prometheus.enabled=false \
+  --set installCRDs=true
+----
 
 == Keycloak

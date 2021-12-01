@@ -61,6 +61,28 @@ connect:errno=11
 command terminated with exit code 1
 ----
 
+----
+
+kubectl exec -ti dnsutils -- cat /etc/resolv.conf
+search debug.svc.cluster.local svc.cluster.local cluster.local
+nameserver 10.43.0.10
+options ndots:5
+
+kubectl get pods --namespace=kube-system -l k8s-app=kube-dns
+NAME                       READY   STATUS    RESTARTS   AGE
+coredns-7448499f4d-jnkjr   1/1     Running   0          43h
+[thofmann@w530 dns]$ kubectl logs --namespace=kube-system -l k8s-app=kube-dns
+[ERROR] plugin/errors: 2 my.ent.1password.com. A: read udp 10.42.0.4:39985->8.8.4.4:53: i/o timeout
+[ERROR] plugin/errors: 2 my.ent.1password.com. AAAA: read udp 10.42.0.4:42947->8.8.8.8:53: i/o timeout
+[ERROR] plugin/errors: 2 my.ent.1password.com. A: read udp 10.42.0.4:49874->8.8.4.4:53: i/o timeout
+[ERROR] plugin/errors: 2 my.ent.1password.com. AAAA: read udp 10.42.0.4:56591->8.8.8.8:53: read: no route to host
+[ERROR] plugin/errors: 2 my.ent.1password.com. A: read udp 10.42.0.4:49352->192.168.0.1:53: i/o timeout
+[ERROR] plugin/errors: 2 my.ent.1password.com. AAAA: read udp 10.42.0.4:46497->8.8.4.4:53: read: no route to host
+[ERROR] plugin/errors: 2 my.ent.1password.com. A: read udp 10.42.0.4:54904->8.8.4.4:53: i/o timeout
+[ERROR] plugin/errors: 2 heise.de. A: read udp 10.42.0.4:52613->8.8.8.8:53: i/o timeout
+[ERROR] plugin/errors: 2 www.heise.de. A: read udp 10.42.0.4:45065->192.168.0.1:53: i/o timeout
+----
+
 == Traefik
 https://doc.traefik.io/traefik/[Documentation^]
 https://doc.traefik.io/traefik/https/acme/[Documentation on ACME^]

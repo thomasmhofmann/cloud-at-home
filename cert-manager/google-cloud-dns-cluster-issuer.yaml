@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: google-cloud-dns-cluster-issuer
+spec:
+  acme:
+    email: cert-manager@randombits.de
+    #server: https://acme-staging-v02.api.letsencrypt.org/directory
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: google-cloud-dns-cluster-issuer-account-key    
+    solvers:
+    - dns01:
+        cloudDNS:
+          # The ID of the GCP project
+          project: home-305320
+          # This is the secret used to access the service account
+          serviceAccountSecretRef:
+            name: google-cloud-dns-svc-acct
+            key: key.json

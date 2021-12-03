@@ -1,4 +1,4 @@
-= Goal
+== Goal
 Run a Kubernetes Cluster on a (small) machine at home.
 
 Run workloads like:
@@ -8,7 +8,7 @@ Run workloads like:
 * GitLab
 * CodeServer
 
-= Setup
+== Setup
 
 * Fedora (35) as operating system
 * k3s as Kubernetes distribution
@@ -20,14 +20,14 @@ Run workloads like:
 * cert-manager
 * Keycloak
 
-== k3s
+=== k3s
 https://rancher.com/docs/k3s/latest/en/[Documentation^]
 
 ----
 curl -sfL https://get.k3s.io | sh -
 ----
 
-== Longhorn
+=== Longhorn
 https://longhorn.io/docs/1.2.2/advanced-resources/os-distro-specific/csi-on-k3s/[Documentation^]
 
 https://rancher.com/docs/k3s/latest/en/storage/[Install via kubectl^]:
@@ -36,7 +36,7 @@ https://rancher.com/docs/k3s/latest/en/storage/[Install via kubectl^]:
 kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
 ----
 
-== Kubectl Bash Completion
+=== Kubectl Bash Completion
 https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-bash-linux/
 
 ----
@@ -45,7 +45,7 @@ echo 'alias k=kubectl' >>~/.bashrc
 echo 'complete -F __start_kubectl k' >>~/.bashrc
 ----
 
-== Starship
+=== Starship
 https://starship.rs/[Web Site]
 
 Install:
@@ -73,7 +73,7 @@ format = 'on [⛵ $context \($namespace\)](dimmed green) '
 disabled = false
 ----
 
-== 1Password Secrets Automation
+=== 1Password Secrets Automation
 https://support.1password.com/connect-deploy-kubernetes[Setup^]
 https://github.com/1Password/connect-helm-charts[Helm Repository^]
 https://github.com/1Password/connect-helm-charts/tree/main/charts/connect[Details on the Connect Server and Operator^]
@@ -202,11 +202,33 @@ inst-ver2-eip-all-2-0-0-secrets   Opaque                                42     3
 test-password                     Opaque                                1      3m16s
 ----
 
-== Traefik
+=== Traefik
 https://doc.traefik.io/traefik/[Documentation^]
 https://doc.traefik.io/traefik/https/acme/[Documentation on ACME^]
 
-== cert-manager
+It seems to be difficult to connect to TLS backends that use a self-signed cert: 
+https://community.traefik.io/t/problem-using-ssl-backend-with-selfsigned-certificates/1974
+
+So I think I will switch to ngnix ingress.
+Traefik can be uninstalled like this:
+https://github.com/k3s-io/k3s/issues/1160
+
+----
+kubectl -n kube-system delete helmcharts.helm.cattle.io traefik
+
+sudo service k3s stop
+
+sudo vim /etc/systemd/system/k3s.service
+  add line: --no-deploy traefik \
+
+sudo systemctl daemon-reload
+
+sudo rm /var/lib/rancher/k3s/server/manifests/traefik.yaml
+
+sudo service k3s start
+----
+
+=== cert-manager
 https://cert-manager.io/docs/[Docs^] are here. Will be used with LetsEncrypt.
 
 Installation:
@@ -226,4 +248,48 @@ helm install \
   --set installCRDs=true
 ----
 
-== Keycloak
+=== OLM
+https://operatorhub.io/how-to-install-an-operator[Installation^]
+----
+kubectl create -f https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/olm.yaml
+----
+
+Not successful:app-name: 
+----
+kubectl create -f https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/olm.yaml
+namespace/olm created
+namespace/operators created
+serviceaccount/olm-operator-serviceaccount created
+clusterrole.rbac.authorization.k8s.io/system:controller:operator-lifecycle-manager created
+clusterrolebinding.rbac.authorization.k8s.io/olm-operator-binding-olm created
+deployment.apps/olm-operator created
+deployment.apps/catalog-operator created
+clusterrole.rbac.authorization.k8s.io/aggregate-olm-edit created
+clusterrole.rbac.authorization.k8s.io/aggregate-olm-view created
+unable to recognize "https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/olm.yaml": no matches for kind "OperatorGroup" in version "operators.coreos.com/v1"
+unable to recognize "https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/olm.yaml": no matches for kind "OperatorGroup" in version "operators.coreos.com/v1"
+unable to recognize "https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/olm.yaml": no matches for kind "ClusterServiceVersion" in version "operators.coreos.com/v1alpha1"
+unable to recognize "https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/olm.yaml": no matches for kind "CatalogSource" in version "operators.coreos.com/v1alpha1"
+----
+
+https://github.com/operator-framework/operator-lifecycle-manager/blob/master/doc/install/install.md
+
+https://github.com/operator-framework/operator-lifecycle-manager/releases:app-name: 
+
+----
+curl -L https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.19.1/install.sh -o install.sh
+chmod +x install.sh
+./install.sh v0.19.1
+----
+
+Openshift Console:
+https://kubevirt.io/2020/OKD-web-console-install.html
+
+----
+kubectl create serviceaccount console -n kube-system
+kubectl create clusterrolebinding console --clusterrole=cluster-admin --serviceaccount=kube-system:console -n kube-system
+----
+
+
+=== Keycloak
+https://github.com/keycloak/keycloak-operator[Keycloak Operator^]

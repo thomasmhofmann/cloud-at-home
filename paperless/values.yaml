@@ -1,0 +1,105 @@
+env:
+  PAPERLESS_REDIS: redis://paperless-redis-headless:6379
+  PAPERLESS_OCR_LANGUAGE: deu
+  PAPERLESS_OCR_MODE: skip_noarchive
+  PAPERLESS_FILENAME_FORMAT: "{created_year}/{correspondent}/{title}"
+  PAPERLESS_SECRET_KEY: "hsadsakjcsakjdshaiudsaiudsadkjsahdusahdusahud"
+  PAPERLESS_ADMIN_USER:
+    valueFrom:
+      secretKeyRef:
+        name: paperless
+        key: admin-user
+  PAPERLESS_ADMIN_PASSWORD:
+    valueFrom:
+      secretKeyRef:
+        name: paperless
+        key: admin-password
+  #PAPERLESS_ENABLE_HTTP_REMOTE_USER: true #SSO
+  #PAPERLESS_LOGOUT_REDIRECT_URL
+  PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: true
+  PAPERLESS_FILENAME_DATE_ORDER: YMD
+  PAPERLESS_IGNORE_DATES: "16.06.1975, 02.12.1978"
+  PAPERLESS_TIME_ZONE: "Europe/Berlin"
+  TZ: "Europe/Berlin"
+
+ingress:
+  main:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: google-cloud-dns-cluster-issuer
+      nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    hosts:
+      - host: paperless.randombits.de
+        http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: paperless
+                port:
+                  number: 8000
+    tls:
+      - hosts:
+        - paperless.randombits.de
+        secretName: paperless-cert
+
+persistence:
+  data:
+    enabled: true
+    size: 500Mi
+    storageClass: longhorn
+  media:
+    enabled: true
+    size: 10Gi
+    storageClass: longhorn
+  consume:
+    enabled: true
+    type: hostPath
+    hostPath: /mnt/gdrive/ScanSnap
+  export:
+    enabled: true
+    size: 10Gi
+    type: emptyDir
+
+redis:
+  enabled: true
+  architecture: standalone
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: false
+  fullnameOverride: paperless-redis
+
+# Add a samba sidecar
+# additionalContainers:
+#   samba:
+#     image: dperson/samba
+#     name: samba
+#     env:
+#       - name: SHARE
+#         value: consume;/usr/src/paperless/consume;no;no;no;paperless
+#       - name: USER
+#         value: paperless;paperless
+
+# service:
+#   samba:
+#     enabled: true
+#     primary: false
+#     nameOverride:
+#     type: LoadBalancer
+
+#     ports:
+#       tcp:
+#         enabled: true
+#         primary: false
+#         port: 445
+#         targetPort: 445
+#         protocol: TCP
+#       netbios:
+#         enabled: true
+#         primary: false
+#         port: 139
+#         targetPort: 139
+#         protocol: TCP

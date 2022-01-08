@@ -16,6 +16,8 @@ env:
         key: admin-password
   #PAPERLESS_ENABLE_HTTP_REMOTE_USER: true #SSO
   #PAPERLESS_LOGOUT_REDIRECT_URL
+  PAPERLESS_CONSUMER_POLLING: 30
+  PAPERLESS_CONSUMER_RECURSIVE: true
   PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: true
   PAPERLESS_FILENAME_DATE_ORDER: YMD
   PAPERLESS_IGNORE_DATES: "16.06.1975, 02.12.1978"
@@ -47,16 +49,16 @@ ingress:
 persistence:
   data:
     enabled: true
-    size: 500Mi
-    storageClass: longhorn
+    size: 2Gi
+    storageClass: longhorn-retain-encrypt
   media:
     enabled: true
-    size: 10Gi
-    storageClass: longhorn
+    size: 20Gi
+    storageClass: longhorn-retain-encrypt
   consume:
     enabled: true
     type: hostPath
-    hostPath: /mnt/gdrive/ScanSnap
+    hostPath: /mnt/tmhgdrive/ScanSnap
   export:
     enabled: true
     size: 10Gi

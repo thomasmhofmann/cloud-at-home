@@ -1,0 +1,24 @@
+components:
+  agentSmith:
+    disabled: true
+  wsDaemon:
+    containerRuntime:
+      containerd:
+        socket: /var/run/k3s/containerd/containerd.sock
+      nodeRoots:
+        - /var/run/k3s/containerd/io.containerd.runtime.v2.task/k8s.io    
+docker-registry:
+  authentication:
+    username: gitpod
+    password: your-registry-password
+rabbitmq:
+  auth:
+    username: your-rabbitmq-user
+    password: your-secret-rabbitmq-password
+minio:
+  accessKey: your-random-access-key
+  secretKey: your-random-secret-key
+  persistence:
+    size: 50Gi
+#    storageClass: longhorn
+

@@ -1,0 +1,1 @@
+helm upgrade --install home-assistant k8s-at-home/home-assistant -n home-assistant -f values.yaml

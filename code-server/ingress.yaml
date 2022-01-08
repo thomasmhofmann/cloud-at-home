@@ -3,21 +3,22 @@ kind: Ingress
 metadata:
   annotations:
     cert-manager.io/cluster-issuer: google-cloud-dns-cluster-issuer
-  name: home-assistant
-  namespace: home-assistant
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+  name: code-server
+  namespace: code-server
 spec:
   rules:
-    - host: home-assistant.randombits.de
+    - host: code-server.randombits.de
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: home-assistant
+                name: code-server
                 port:
-                  number: 8123
+                  number: 8080
   tls:
   - hosts:
-    - home-assistant.randombits.de
-    secretName: home-assistant-cert
+    - code-server.randombits.de
+    secretName: code-server-cert

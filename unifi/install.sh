@@ -1,0 +1,1 @@
+helm upgrade --install unifi k8s-at-home/unifi -n unifi -f values.yaml

@@ -396,16 +396,38 @@ https://github.com/k8s-at-home/charts/tree/master/charts/stable/home-assistant#h
 https://github.com/k8s-at-home/charts/blob/master/charts/stable/paperless/values.yaml
 
 ----
-helm install paperless k8s-at-home/paperless --namespace paperless --create-namespace=true \
- --set env.TZ="Europe/Berlin" \
- --set env.PAPERLESS_OCR_LANGUAGE="deu" \
- --set persistence.data.enabled=true \
- --set persistence.data.size="1Gi" \
- --set persistence.media.enabled=true \
- --set persistence.media.size="1Gi" \
- --set persistence.consume.enabled=true \
- --set persistence.consume.size="500Mi" \
- --set persistence.export.enabled=true \
- --set persistence.export.size="1Gi" \
- --set redis.enabled=true
+helm install paperless k8s-at-home/paperless -f values.yaml --namespace paperless
+----
+
+Mount Google Drive as a host path
+----
+sudo cat /etc/systemd/system/mnt-gdrive.mount
+[Unit]
+After=network-online.target
+[Mount]
+Type=rclone
+What=gdrive:
+Where=/mnt/gdrive
+Options=rw,allow_other,args2env,vfs-cache-mode=writes,config=/home/thofmann/.config/rclone/rclone.conf,cache-dir=/var/rclone
+----
+
+----
+sudo cat /etc/systemd/system/mnt-gdrive.automount
+[Unit]
+After=network-online.target
+Before=remote-fs.target
+[Automount]
+Where=/mnt/gdrive
+TimeoutIdleSec=600
+[Install]
+WantedBy=multi-user.target
+----
+
+=== GitLab
+
+https://docs.gitlab.com/charts/quickstart/[Quickstart^]
+
+----
+helm repo add gitlab https://charts.gitlab.io/
+helm repo update
 ----

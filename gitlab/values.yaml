@@ -1,0 +1,80 @@
+env:
+  TZ: "Europe/Berlin"
+
+# Gitlab
+certmanager:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+certmanager-issuer:
+  email: cert-manager@randombits.de
+prometheus:
+  install: false
+gitlab-runner:
+  install: false
+redis:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+minio:
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 10m
+
+nginx-ingress:
+  enabled: false
+global: 
+  hosts:
+    domain: gitlab-quick.randombits.de
+  ingres:
+    configureCertmanager: false
+  rails:
+    bootsnap:
+      enabled: false
+  shell:
+    # Configure the clone link in the UI to include the high-numbered NodePort
+    # value from below (`gitlab.gitlab-shell.service.nodePort`)
+    port: 32022
+
+gitlab:
+  webservice:
+    minReplicas: 1
+    resources:
+      limits:
+       memory: 1.5G
+      requests:
+        cpu: 100m
+        memory: 900M
+    workhorse:
+      resources:
+        limits:
+          memory: 100M
+        requests:
+          cpu: 10m
+          memory: 10M
+  sidekiq:
+    minReplicas: 1
+    resources:
+      limits:
+        memory: 1.5G
+      requests:
+        cpu: 50m
+        memory: 625M
+  gitlab-shell:
+    minReplicas: 1
+    # Map gitlab-shell to a high-numbered NodePort to support cloning over SSH since
+    # Minikube takes port 22.
+    service:
+      type: NodePort
+      nodePort: 32022
+  toolbox:
+    enabled: false
+registry:
+  hpa:
+    minReplicas: 1
+certmanager:
+  install: false
+

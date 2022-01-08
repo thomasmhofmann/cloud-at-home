@@ -1,0 +1,1 @@
+helm upgrade --install paperless k8s-at-home/paperless -n paperless -f values.yaml

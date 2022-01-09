@@ -7,6 +7,8 @@ gitea:
   config:
     server:
       DISABLE_SSH: true
+    service:
+      DISABLE_REGISTRATION: true
 
 image:
   rootless: true
@@ -27,10 +29,11 @@ ingress:
       - gitea.randombits.de
       secretName: gitea-cert
 
-#persistence:
-  #size:
-  #storageClass:
+persistence:
+  size: 20Gi
+  storageClass: longhorn-retain-encrypt
 
 postgresql:
   persistence:
-    size: 5Gi 
+    storageClass: longhorn-retain-encrypt
+#    size: 10Gi 

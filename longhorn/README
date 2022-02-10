@@ -1,0 +1,7 @@
+Initially, longhorn was installed via kubectl.
+1.2.3 was also installed via kubectl.
+Helm cannot be used unless the resources are deleted first.
+
+CAUTION: Uninstalling will erase data and metadata.
+Not sure if uninstall job will run when deleting resources via kubectl (maybe through some hook).
+Probably not: https://longhorn.io/docs/1.2.3/deploy/uninstall/#uninstalling-longhorn-using-kubectl

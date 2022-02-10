@@ -1,0 +1,71 @@
+{
+    "firewall": {
+        "name": {
+            "WAN_LOCAL": {
+                "rule": {
+                    "20": {
+                        "action": "accept",
+                        "description": "WireGuard",
+                        "destination": {
+                            "port": "443"
+                        },
+                        "protocol": "udp"
+                    }
+                }
+            }
+        },
+        "group": {
+            "network-group": {
+                "remote_user_vpn_network": {
+                    "description": "Remote User VPN subnets",
+                    "network": [
+                        "10.255.252.0/24"
+                    ]
+                }
+            }
+        }
+    },
+    "interfaces": {
+        "wireguard": {
+            "wg0": {
+                "description": "VPN for remote clients",
+                "address": [
+                    "10.255.252.1/24"
+                ],
+                "firewall": {
+                    "in": {
+                        "name": "LAN_IN"
+                    },
+                    "local": {
+                        "name": "LAN_LOCAL"
+                    },
+                    "out": {
+                        "name": "LAN_OUT"
+                    }
+                },
+                "listen-port": "443",
+                "mtu": "1352",
+                "peer": [
+                    {
+                        "7Z+9F3vkF3qu7DZjYHJWmIygxZ1zV5+G3ImyHC8J9Wk=": {
+                            "allowed-ips": [
+                                "10.255.252.2/32"
+                            ],
+                            "persistent-keepalive": 60
+                        }
+                    },
+                    {
+                        "OmKoTiw/aCFQgcfGIevXFRaUCyPl6sWtAv/kG7f4RBQ=": {
+                            "allowed-ips": [
+                                "10.255.252.3/32"
+                            ],
+                            "persistent-keepalive": 60
+                        }
+                    }
+                ],
+                "private-key": "/config/auth/wg.key",
+                "route-allowed-ips": "true"
+            }
+        }
+    }
+}

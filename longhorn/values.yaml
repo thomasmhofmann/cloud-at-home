@@ -1,0 +1,76 @@
+defaultSettings:
+  backupTarget: s3://tmh-longhorn@eu-central-003/
+  backupTargetCredentialSecret: longhorn
+  allowRecurringJobWhileVolumeDetached: ~
+  createDefaultDiskLabeledNodes: ~
+  defaultDataPath: ~
+  defaultDataLocality: ~
+  replicaSoftAntiAffinity: ~
+  replicaAutoBalance: ~
+  storageOverProvisioningPercentage: ~
+  storageMinimalAvailablePercentage: ~
+  upgradeChecker: ~
+  defaultReplicaCount: ~
+  defaultLonghornStaticStorageClass: ~
+  backupstorePollInterval: 0
+  taintToleration: ~
+  systemManagedComponentsNodeSelector: ~
+  priorityClass: ~
+  autoSalvage: ~
+  autoDeletePodWhenVolumeDetachedUnexpectedly: ~
+  disableSchedulingOnCordonedNode: ~
+  replicaZoneSoftAntiAffinity: ~
+  nodeDownPodDeletionPolicy: ~
+  allowNodeDrainWithLastHealthyReplica: ~
+  mkfsExt4Parameters: ~
+  disableReplicaRebuild: ~
+  replicaReplenishmentWaitInterval: ~
+  concurrentReplicaRebuildPerNodeLimit: ~
+  disableRevisionCounter: ~
+  systemManagedPodsImagePullPolicy: ~
+  allowVolumeCreationWithDegradedAvailability: ~
+  autoCleanupSystemGeneratedSnapshot: ~
+  concurrentAutomaticEngineUpgradePerNodeLimit: ~
+  backingImageCleanupWaitInterval: ~
+  backingImageRecoveryWaitInterval: ~
+  guaranteedEngineManagerCPU: ~
+  guaranteedReplicaManagerCPU: ~
+
+ingress:
+  ## Set to true to enable ingress record generation
+  enabled: true
+
+  ## Add ingressClassName to the Ingress
+  ## Can replace the kubernetes.io/ingress.class annotation on v1.18+
+  ingressClassName: ~
+
+  host: longhorn.randombits.de
+
+  ## Set this to true in order to enable TLS on the ingress record
+  ## A side effect of this will be that the backend service will be connected at port 443
+  tls: true
+
+  ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
+  tlsSecret: longhorn-cert
+
+  ## Ingress annotations done as key:value pairs
+  ## If you're using kube-lego, you will want to add:
+  ## kubernetes.io/tls-acme: true
+  ##
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/annotations.md
+  ##
+  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
+  annotations:
+    cert-manager.io/cluster-issuer: google-cloud-dns-cluster-issuer
+    # type of authentication
+    nginx.ingress.kubernetes.io/auth-type: basic
+    # prevent the controller from redirecting (308) to HTTPS
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    # name of the secret that contains the user/password definitions
+    nginx.ingress.kubernetes.io/auth-secret: longhorn
+    # message to display with an appropriate context why the authentication is required
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required '
+    # custom max body size for file uploading like backing image uploading
+    nginx.ingress.kubernetes.io/proxy-body-size: 10000m
+

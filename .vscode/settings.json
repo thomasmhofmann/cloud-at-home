@@ -1,5 +1,11 @@
 {
     "cSpell.words": [
-        "keepalive"
+        "daemonset",
+        "keepalive",
+        "kubectl",
+        "Kubernetes",
+        "restic",
+        "tolerations",
+        "Velero"
     ]
 }

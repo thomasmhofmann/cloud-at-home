@@ -1,6 +1,12 @@
 env:
   TZ: "Europe/Berlin"
 
+podAnnotations:
+  pre.hook.backup.velero.io/container: fsfreeze
+  pre.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--freeze", "/home"]'
+  post.hook.backup.velero.io/container: fsfreeze
+  post.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--unfreeze", "/home"]'
+
 ingress:
   main:
     enabled: true
@@ -28,7 +34,7 @@ persistence:
   data:
     enabled: true
     size: 2Gi
-    storageClass: longhorn-static
+    storageClass: openebs-hostpath
     accessMode: ReadWriteOnce
 
 service:

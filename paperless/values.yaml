@@ -24,6 +24,12 @@ env:
   PAPERLESS_TIME_ZONE: "Europe/Berlin"
   TZ: "Europe/Berlin"
 
+podAnnotations:
+  pre.hook.backup.velero.io/container: fsfreeze
+  pre.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--freeze", "/usr/src/paperless/data"]'
+  post.hook.backup.velero.io/container: fsfreeze
+  post.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--unfreeze", "/usr/src/paperless/data"]'
+
 ingress:
   main:
     enabled: true
@@ -50,11 +56,11 @@ persistence:
   data:
     enabled: true
     size: 2Gi
-    storageClass: longhorn-retain-encrypt
+    storageClass: openebs-hostpath
   media:
     enabled: true
     size: 20Gi
-    storageClass: longhorn-retain-encrypt
+    storageClass: openebs-hostpath
   consume:
     enabled: true
     type: hostPath

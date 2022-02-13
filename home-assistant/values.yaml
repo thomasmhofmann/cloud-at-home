@@ -4,7 +4,13 @@ image:
 env:
   TZ: "Europe/Berlin"
 
-    # -- Set the resource requests / limits for the main container.
+podAnnotations:
+  pre.hook.backup.velero.io/container: fsfreeze
+  pre.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--freeze", "/config"]'
+  post.hook.backup.velero.io/container: fsfreeze
+  post.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--unfreeze", "/config"]'
+
+# -- Set the resource requests / limits for the main container.
 resources:
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
@@ -56,7 +62,7 @@ persistence:
   config:
     enabled: true
     size: 5Gi
-    storageClass: longhorn-retain-encrypt
+    storageClass: openebs-hostpath
   media:
     enabled: true
     type: hostPath

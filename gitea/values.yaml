@@ -9,6 +9,11 @@ gitea:
       DISABLE_SSH: true
     service:
       DISABLE_REGISTRATION: true
+  podAnnotations:
+    pre.hook.backup.velero.io/container: fsfreeze
+    pre.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--freeze", "/data"]'
+    post.hook.backup.velero.io/container: fsfreeze
+    post.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--unfreeze", "/data"]'      
 
 image:
   rootless: true
@@ -31,9 +36,15 @@ ingress:
 
 persistence:
   size: 20Gi
-  storageClass: longhorn-retain-encrypt
+  storageClass: openebs-hostpath
 
 postgresql:
   persistence:
-    storageClass: longhorn-retain-encrypt
+    storageClass: openebs-hostpath
+  primary:
+    podAnnotations:
+      pre.hook.backup.velero.io/container: fsfreeze
+      pre.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--freeze", "/bitnami/postgresql"]'
+      post.hook.backup.velero.io/container: fsfreeze
+      post.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--unfreeze", "/bitnami/postgresql"]'
 #    size: 10Gi 

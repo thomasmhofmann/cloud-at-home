@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: codercom/code-server
-  tag: '4.0.1'
+  tag: '4.0.2'
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -24,6 +24,10 @@ serviceAccount:
   name: ""
 
 podAnnotations: {}
+  pre.hook.backup.velero.io/container: fsfreeze
+  pre.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--freeze", "/unifi"]'
+  post.hook.backup.velero.io/container: fsfreeze
+  post.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--unfreeze", "/unifi"]'
 
 podSecurityContext: {}
   # fsGroup: 2000
@@ -119,7 +123,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass: "longhorn-retain-encrypt"
+  storageClass: "openebs-hostpath"
   accessMode: ReadWriteOnce
   size: 20Gi
   annotations: {}

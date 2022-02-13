@@ -3,9 +3,23 @@ env:
 
 podAnnotations:
   pre.hook.backup.velero.io/container: fsfreeze
-  pre.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--freeze", "/home"]'
+  pre.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--freeze", "/freeze"]'
   post.hook.backup.velero.io/container: fsfreeze
-  post.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--unfreeze", "/home"]'
+  post.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--unfreeze", "/freeze"]'
+
+additionalContainers:
+  - image: ubuntu:bionic
+    name: fsfreeze
+    securityContext:
+      privileged: true
+    volumeMounts:
+      - mountPath: "/freeze"
+        name: data
+        readOnly: false
+    command:
+      - "/bin/bash"
+      - "-c"
+      - "sleep infinity"
 
 ingress:
   main:

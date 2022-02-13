@@ -8,12 +8,7 @@ gitea:
     server:
       DISABLE_SSH: true
     service:
-      DISABLE_REGISTRATION: true
-  podAnnotations:
-    pre.hook.backup.velero.io/container: fsfreeze
-    pre.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--freeze", "/data"]'
-    post.hook.backup.velero.io/container: fsfreeze
-    post.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--unfreeze", "/data"]'      
+      DISABLE_REGISTRATION: true       
 
 image:
   rootless: true
@@ -44,7 +39,20 @@ postgresql:
   primary:
     podAnnotations:
       pre.hook.backup.velero.io/container: fsfreeze
-      pre.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--freeze", "/bitnami/postgresql"]'
+      pre.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--freeze", "/freeze"]'
       post.hook.backup.velero.io/container: fsfreeze
-      post.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--unfreeze", "/bitnami/postgresql"]'
+      post.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--unfreeze", "/freeze"]'
+    sidecars:
+      - image: ubuntu:bionic
+        name: fsfreeze
+        securityContext:
+          privileged: true
+        volumeMounts:
+          - mountPath: "/freeze"
+            name: data
+            readOnly: false
+        command:
+          - "/bin/bash"
+          - "-c"
+          - "sleep infinity"
 #    size: 10Gi 

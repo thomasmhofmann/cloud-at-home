@@ -23,25 +23,25 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-podAnnotations:
-  pre.hook.backup.velero.io/container: fsfreeze
-  pre.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--freeze", "/freeze"]'
-  post.hook.backup.velero.io/container: fsfreeze
-  post.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--unfreeze", "/freeze"]'
+# podAnnotations:
+#   pre.hook.backup.velero.io/container: fsfreeze
+#   pre.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--freeze", "/freeze"]'
+#   post.hook.backup.velero.io/container: fsfreeze
+#   post.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--unfreeze", "/freeze"]'
 
-additionalContainers:
-  - image: ubuntu:bionic
-    name: fsfreeze
-    securityContext:
-      privileged: true
-    volumeMounts:
-      - mountPath: "/freeze"
-        name: data
-        readOnly: false
-    command:
-      - "/bin/bash"
-      - "-c"
-      - "sleep infinity"
+# additionalContainers:
+#   - image: ubuntu:bionic
+#     name: fsfreeze
+#     securityContext:
+#       privileged: true
+#     volumeMounts:
+#       - mountPath: "/freeze"
+#         name: data
+#         readOnly: false
+#     command:
+#       - "/bin/bash"
+#       - "-c"
+#       - "sleep infinity"
 
 podSecurityContext: {}
   # fsGroup: 2000

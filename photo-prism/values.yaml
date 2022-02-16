@@ -1,0 +1,75 @@
+
+global:
+  # -- Set an override for the prefix of the fullname
+  # nameOverride: "y"
+  # -- Set the entire name definition
+  fullnameOverride: "photo-prism"
+  
+configmap:
+  config:
+    enabled: true
+    data: 
+      PHOTOPRISM_STORAGE_PATH: /photoprism/storage
+      PHOTOPRISM_ORIGINALS_PATH: /photoprism/originals
+      PHOTOPRISM_PUBLIC: "false"
+      PHOTOPRISM_READONLY: "true"
+      PHOTOPRISM_EXPERIMENTAL: "true"
+      PHOTOPRISM_DISABLE_WEBDAV: "true"
+      PHOTOPRISM_SITE_URL: https://photo-prism.randombits.de
+      PHOTOPRISM_SPONSOR: "true"
+
+# -- environment variables. See [image docs](https://docs.photoprism.org/getting-started/config-options/) for more details.
+env:
+  TZ: "Europe/Berlin"
+  PHOTOPRISM_UID:  1000
+  PHOTOPRISM_GID:  1000
+  # UMASK:  # 0000
+
+envFrom:
+  - configMapRef:
+      name: photo-prism-config
+  - secretRef:
+      name: photo-prism-secret
+
+service:
+  main:
+    ports:
+      http:
+        port: 2342
+
+ingress:
+  main:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: google-cloud-dns-cluster-issuer
+      nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    hosts:
+      - host: photo-prism.randombits.de
+        http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: photo-prism
+                port:
+                  number: 2342
+    tls:
+      - hosts:
+        - photo-prism.randombits.de
+        secretName: photo-prism-cert
+
+persistence:
+  config:
+    enabled: true
+    size: 100Gi
+    storageClass: openebs-hostpath
+    accessMode: ReadWriteOnce 
+    mountPath: /photoprism/storage
+
+  originals:
+    enabled: true
+    type: hostPath
+    hostPath: /home/thofmann/syncthing/Thomas/Phone/DCIM
+    mountPath: "/photoprism/originals/Thomas/Phone/DCIM"
+    readOnly: true

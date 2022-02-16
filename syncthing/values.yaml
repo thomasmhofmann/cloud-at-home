@@ -1,0 +1,71 @@
+podSecurityContext: 
+#  runAsUser: 0
+#  runAsGroup: 0
+  fsGroup: 1000
+
+service:
+  main:
+    ports:
+      http:
+        port: 8384
+  listen:
+    enabled: true
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+    ports:
+      listen:
+        enabled: true
+        port: 22000
+        protocol: TCP
+        targetPort: 22000
+  discovery:
+    enabled: true
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+    ports:
+      discovery:
+        enabled: true
+        port: 21027
+        protocol: UDP
+        targetPort: 21027
+
+ingress:
+  # -- Enable and configure ingress settings for the chart under this key.
+  # @default -- See values.yaml
+  main:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: google-cloud-dns-cluster-issuer
+      nginx.ingress.kubernetes.io/proxy-body-size: 10000m
+    hosts:
+      - host: syncthing.randombits.de
+        http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: syncthing
+                port:
+                  number: 8384
+    tls:
+      - hosts:
+        - syncthing.randombits.de
+        secretName: syncthing-cert
+
+
+# -- Configure persistence settings for the chart under this key.
+# @default -- See values.yaml
+persistence:
+  data:
+    enabled: true
+    type: hostPath
+    hostPath: /home/thofmann/syncthing
+    mountPath: /var/syncthing/data
+
+  config:
+    enabled: true
+    mountPath: /var/syncthing/config
+    size: 2Gi
+    storageClass: openebs-hostpath
+    accessMode: ReadWriteOnce

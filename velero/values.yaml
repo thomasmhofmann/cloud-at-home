@@ -363,6 +363,7 @@ restic:
   # see more informations at: https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html
   podSecurityContext:
     runAsUser: 0
+    runAsGroup: 1000
     # fsGroup: 1337
 
   # Container Level Security Context for the 'restic' container of the restic DaemonSet. Optional.

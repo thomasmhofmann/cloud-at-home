@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: local-volume-provider-config
+  namespace: velero
+  labels:
+    velero.io/plugin-config: ""
+    replicated.com/nfs: ObjectStore
+    replicated.com/hostpath: ObjectStore
+data:
+  # Customize these values
+  # veleroDeploymentName: velero
+  # resticDaemonsetName: restic
+  # Useful for local development
+  # fileserverImage: ttl.sh/<your user>/local-volume-provider:12h
+  # Helps to lock down file permissions to known users/groups on the target volume
+  securityContextRunAsUser: "1000"
+  securityContextRunAsGroup: "0"
+  # securityContextFsGroup: "1001"

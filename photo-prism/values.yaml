@@ -73,3 +73,17 @@ persistence:
     hostPath: /home/thofmann/syncthing/Thomas/Phone/DCIM
     mountPath: "/photoprism/originals/Thomas/Phone/DCIM"
     readOnly: true
+
+  originals-2:
+    enabled: true
+    type: hostPath
+    hostPath: /home/thofmann/syncthing/Thomas/Camera-and-Scans
+    mountPath: "/photoprism/originals/Thomas/Camera-and-Scans"
+    readOnly: true
+
+  originals-3:
+    enabled: true
+    type: hostPath
+    hostPath: /home/thofmann/syncthing/Thomas/Phone/DCIM-Old
+    mountPath: "/photoprism/originals/Thomas/Phone/DCIM-Old"
+    readOnly: true    

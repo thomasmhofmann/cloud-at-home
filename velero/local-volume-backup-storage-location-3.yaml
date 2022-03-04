@@ -1,16 +1,16 @@
 apiVersion: velero.io/v1
 kind: BackupStorageLocation
 metadata:
-  name: velero-external-disk
+  name: velero-internal-disk-2
   namespace: velero
 spec:
   backupSyncPeriod: 2m0s
   provider: replicated.com/hostpath
   objectStorage:
     # This corresponds to a unique volume name
-    bucket: velero-external-disk
+    bucket: velero-internal-disk-2
   config:
     # This path must exist on the host and be writable outside the group
-    path: /mnt/disk-ext-1/velero-backups
+    path: /mnt/disk-int-2/velero-backups
     # Must be provided if you're using Restic; [default mount] + [bucket] + [prefix] + "restic"
-    resticRepoPrefix: /var/velero-local-volume-provider/velero-external-disk/restic
+    resticRepoPrefix: /var/velero-local-volume-provider/velero-internal-disk-2/restic

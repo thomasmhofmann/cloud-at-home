@@ -14,6 +14,6 @@ data:
   # Useful for local development
   # fileserverImage: ttl.sh/<your user>/local-volume-provider:12h
   # Helps to lock down file permissions to known users/groups on the target volume
-  securityContextRunAsUser: "1000"
-  securityContextRunAsGroup: "0"
-  # securityContextFsGroup: "1001"
+  #securityContextRunAsUser: "0"
+  #securityContextRunAsGroup: "1000"
+  #securityContextFsGroup: "1000"

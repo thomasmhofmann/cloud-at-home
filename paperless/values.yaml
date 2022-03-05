@@ -94,6 +94,13 @@ redis:
       enabled: false
   fullnameOverride: paperless-redis
 
+initContainers:
+  wait-for-redis:
+    image: groundnuty/k8s-wait-for:v1.3
+    args:
+      - service
+      - paperless-redis-headless
+      
 # Add a samba sidecar
 # additionalContainers:
 #   samba:

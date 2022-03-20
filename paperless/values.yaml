@@ -24,25 +24,6 @@ env:
   PAPERLESS_TIME_ZONE: "Europe/Berlin"
   TZ: "Europe/Berlin"
 
-# podAnnotations:
-#   pre.hook.backup.velero.io/container: fsfreeze
-#   pre.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--freeze", "/freeze"]'
-#   post.hook.backup.velero.io/container: fsfreeze
-#   post.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--unfreeze", "/freeze"]'
-
-# additionalContainers:
-#   - image: ubuntu:bionic
-#     name: fsfreeze
-#     securityContext:
-#       privileged: true
-#     volumeMounts:
-#       - mountPath: "/freeze"
-#         name: data
-#         readOnly: false
-#     command:
-#       - "/bin/bash"
-#       - "-c"
-#       - "sleep infinity"
 
 ingress:
   main:
@@ -78,7 +59,7 @@ persistence:
   consume:
     enabled: true
     type: hostPath
-    hostPath: /mnt/tmhgdrive/ScanSnap
+    hostPath: /home/thofmann/scans
   export:
     enabled: true
     size: 10Gi
@@ -99,36 +80,4 @@ initContainers:
     image: groundnuty/k8s-wait-for:v1.3
     args:
       - service
-      - paperless-redis-headless
-      
-# Add a samba sidecar
-# additionalContainers:
-#   samba:
-#     image: dperson/samba
-#     name: samba
-#     env:
-#       - name: SHARE
-#         value: consume;/usr/src/paperless/consume;no;no;no;paperless
-#       - name: USER
-#         value: paperless;paperless
-
-# service:
-#   samba:
-#     enabled: true
-#     primary: false
-#     nameOverride:
-#     type: LoadBalancer
-
-#     ports:
-#       tcp:
-#         enabled: true
-#         primary: false
-#         port: 445
-#         targetPort: 445
-#         protocol: TCP
-#       netbios:
-#         enabled: true
-#         primary: false
-#         port: 139
-#         targetPort: 139
-#         protocol: TCP
+      - paperless-redis-headless      

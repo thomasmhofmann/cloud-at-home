@@ -1,0 +1,32 @@
+{
+    "service": {
+        "nat": {
+            "rule": {
+                "1": {
+                    "description": "dnscrypt-proxy DNS redirect",
+                    "destination": {
+                        "address": "!192.168.0.1",
+                        "port": "53"
+                    },
+                    "inbound-interface": "eth1",
+                    "inside-address": {
+                        "address": "192.168.0.1",
+                        "port": "6878"
+                    },
+                    "protocol": "tcp_udp",
+                    "type": "destination"
+                }
+            }
+        },
+        "dns": {
+            "forwarding": {
+                "options": [
+                    "ptr-record=1.0.168.192.in-addr.arpa,USG",
+                    "all-servers",
+                    "cname=unifi.localdomain,unifi",
+                    "server=127.0.0.1#6878"
+                ]
+            }
+        }
+    }
+}

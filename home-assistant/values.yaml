@@ -4,26 +4,6 @@ image:
 env:
   TZ: "Europe/Berlin"
 
-# podAnnotations:
-#   pre.hook.backup.velero.io/container: fsfreeze
-#   pre.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--freeze", "/freeze"]'
-#   post.hook.backup.velero.io/container: fsfreeze
-#   post.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--unfreeze", "/freeze"]'
-
-# additionalContainers:
-#   - image: ubuntu:bionic
-#     name: fsfreeze
-#     securityContext:
-#       privileged: true
-#     volumeMounts:
-#       - mountPath: "/freeze"
-#         name: config
-#         readOnly: false
-#     command:
-#       - "/bin/bash"
-#       - "-c"
-#       - "sleep infinity"
-
 # -- Set the resource requests / limits for the main container.
 resources:
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -78,7 +58,7 @@ persistence:
     size: 5Gi
     storageClass: openebs-hostpath
   media:
-    enabled: true
+    enabled: false
     type: hostPath
     hostPath: /mnt/tmhgdriveopus
     hostPathType: Directory

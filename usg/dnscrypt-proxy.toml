@@ -1,0 +1,99 @@
+# Only use cloudflare's IPv4 and IPv6 DNS services
+server_names = ['cloudflare']
+
+# Listen on eth1's IPv4 address and loopback for IPv4 & IPv6.
+# Default: 127.0.0.1:53
+listen_addresses = ['192.168.0.1:6878', '127.0.0.1:6878']
+
+# Allow all possible internal IP addresses to establish a connection.
+# Adjust for your network size.
+# Default: 250
+max_clients = 1024
+
+# Use both IPv4 and IPv6 servers
+# Default: true
+ipv4_servers = true
+# Default: false
+ipv6_servers = false
+
+# After binding to listen_addresses, drop to the nobody user
+# Default: Continue running as same user
+user_name = "nobody"
+
+# Only use DoH servers, do not use dnscrypt servers
+# Default: true
+doh_servers = true
+# Default: false
+dnscrypt_servers = false
+
+# Require servers to support DNSSec, not save logs, and not filter.
+# Notably, this only matters if we add additional server_names above, Cloudflare supports all of thes
+# Default: false
+require_dnssec = true
+# Default: false
+require_nolog = true
+# Default: false
+require_nofilter = true
+
+# If DoH fails, fall back to regular DNS via Cloudflare
+# Default: 9.9.9.9:53
+#fallback_resolvers = ['1.1.1.1:53', '1.0.0.1:53']
+
+# Do not fall back to the system DNS configuration
+# Notably, the USG doesn't have this.
+# Default: false
+ignore_system_dns = true
+
+
+# Send a SYN packet to Cloudflare to determine if basic internet connectivity can be established.
+# Default: 9.9.9.9:53
+#netprobe_address = '1.1.1.1:53'
+
+# Enable DNS caching to improve subsequent queries for our home network
+cache = true
+# Defaults to 512, 4x the cache size
+cache_size = 4096
+# Default: 60
+cache_min_ttl = 2400
+# Default: 86400
+cache_max_ttl = 86400
+
+block_undelegated = true
+block_ipv6 = true
+
+#[blocked_names]
+#blocked_names_file = 'blocklist.txt'
+#log_file = '/dev/stdout'
+
+[schedules]
+[schedules.'work']
+mon = [{ after = '10:00', before = '17:00' }]
+tue = [{ after = '10:00', before = '17:00' }]
+wed = [{ after = '10:00', before = '17:00' }]
+thu = [{ after = '10:00', before = '17:00' }]
+fri = [{ after = '10:00', before = '17:00' }]
+[schedules.'freetime']
+mon = [{ after = '17:00', before = '23:00' }]
+tue = [{ after = '17:00', before = '23:00' }]
+wed = [{ after = '17:00', before = '23:00' }]
+thu = [{ after = '17:00', before = '23:00' }]
+fri = [{ after = '17:00', before = '23:00' }]
+[schedules.'sleep']
+mon = [{ after = '00:00', before = '08:00' }]
+tue = [{ after = '00:00', before = '08:00' }]
+wed = [{ after = '00:00', before = '08:00' }]
+thu = [{ after = '00:00', before = '08:00' }]
+fri = [{ after = '00:00', before = '08:00' }]
+
+# Enable the public dnscrypt-proxy sources list from which we configure cloudflare
+# Notably, this list includes hundreds of DNS servers you can use.
+
+[sources]
+[sources.'public-resolvers']
+urls = [
+    'https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md',
+    'https://download.dnscrypt.info/resolvers-list/v3/public-resolvers.md',
+]
+cache_file = '/tmp/public-resolvers.md'
+minisign_key = 'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3'
+prefix = ''

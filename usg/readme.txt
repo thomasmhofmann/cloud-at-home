@@ -1,0 +1,1 @@
+https://techsmix.net/ubiquiti-usg-cloudflare-dns-over-tls/

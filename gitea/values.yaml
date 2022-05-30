@@ -35,24 +35,5 @@ persistence:
 
 postgresql:
   persistence:
+    size: 10Gi 
     storageClass: openebs-hostpath
-  # primary:
-  #   podAnnotations:
-  #     pre.hook.backup.velero.io/container: fsfreeze
-  #     pre.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--freeze", "/freeze"]'
-  #     post.hook.backup.velero.io/container: fsfreeze
-  #     post.hook.backup.velero.io/command: '["/sbin/fsfreeze", "--unfreeze", "/freeze"]'
-  #   sidecars:
-  #     - image: ubuntu:bionic
-  #       name: fsfreeze
-  #       securityContext:
-  #         privileged: true
-  #       volumeMounts:
-  #         - mountPath: "/freeze"
-  #           name: data
-  #           readOnly: false
-  #       command:
-  #         - "/bin/bash"
-  #         - "-c"
-  #         - "sleep infinity"
-#    size: 10Gi 

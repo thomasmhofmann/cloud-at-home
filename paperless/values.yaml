@@ -24,6 +24,8 @@ env:
   PAPERLESS_TIME_ZONE: "Europe/Berlin"
   TZ: "Europe/Berlin"
 
+image:
+  tag: 1.9.2
 
 ingress:
   main:
@@ -62,8 +64,8 @@ persistence:
     hostPath: /home/thofmann/scans
   export:
     enabled: true
-    size: 10Gi
-    type: emptyDir
+    type: hostPath
+    hostPath: /home/thofmann/paperless-export    
 
 redis:
   enabled: true

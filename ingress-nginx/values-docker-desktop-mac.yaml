@@ -1,0 +1,37 @@
+controller:
+  config:
+    use-forwarded-headers: "true"
+  custom-http-errors: "404,500,503" 
+  extraArgs:
+    default-ssl-certificate: "ingress-nginx/default-certificate"
+  hostNetwork: false
+  hostPort:
+    enabled: false
+  kind: DaemonSet
+  publishService:
+    enabled: false
+  service:
+    enabled: true
+  watchIngressWithoutClass: true
+    #defaultBackendService: "ingress-default-backend/default-backend"
+
+defaultBackend:
+  enabled: true
+  image:
+    registry: k8s.gcr.io
+    image: ingress-nginx/nginx-errors # Source https://github.com/kubernetes/ingress-nginx/tree/main/images/custom-error-pages
+    tag: "0.48.1" # Check latest version on https://github.com/kubernetes/ingress-nginx/blob/main/docs/examples/customization/custom-errors/custom-default-backend.yaml
+  extraVolumes:
+  - name: error-pages
+    configMap:
+      name: error-pages
+      items:
+      - key: "error-page"
+        path: "404.html"
+      - key: "error-page"
+        path: "500.html"
+      - key: "error-page"
+        path: "503.html"
+  extraVolumeMounts:
+  - name: error-pages
+    mountPath: /www  

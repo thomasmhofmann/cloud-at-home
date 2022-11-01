@@ -31,7 +31,7 @@ ingress:
   main:
     enabled: true
     annotations:
-      cert-manager.io/cluster-issuer: google-cloud-dns-cluster-issuer
+      cert-manager.io/cluster-issuer: http01-cluster-issuer
       nginx.ingress.kubernetes.io/proxy-body-size: 100m
     hosts:
       - host: paperless.randombits.de

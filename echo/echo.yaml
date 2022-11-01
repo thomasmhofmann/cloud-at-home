@@ -40,7 +40,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    cert-manager.io/cluster-issuer: google-cloud-dns-cluster-issuer
+    cert-manager.io/cluster-issuer: http01-cluster-issuer
   name: echo
   namespace: echo
 spec:

@@ -62,7 +62,7 @@ ingress:
   ##
   ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   annotations:
-    cert-manager.io/cluster-issuer: google-cloud-dns-cluster-issuer
+    cert-manager.io/cluster-issuer: http01-cluster-issuer
     # type of authentication
     nginx.ingress.kubernetes.io/auth-type: basic
     # prevent the controller from redirecting (308) to HTTPS

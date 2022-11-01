@@ -16,7 +16,7 @@ image:
 ingress:
   enabled: true
   annotations: 
-      cert-manager.io/cluster-issuer: google-cloud-dns-cluster-issuer
+      cert-manager.io/cluster-issuer: http01-cluster-issuer
       nginx.ingress.kubernetes.io/proxy-body-size: 1000m
   hosts:
     - host: gitea.randombits.de
